@@ -18,21 +18,36 @@ const auth = getAuth();
 let Btn = document.querySelector("#signUp");
 
 Btn.addEventListener("click", () => {
+  let message = document.querySelector("#para");
   let Email = document.querySelector("#semail");
   let password = document.querySelector("#spass");
-  console.log(Email.value);
-  console.log(password.value);
-  createUserWithEmailAndPassword(auth, Email.value, password.value)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      console.log("user =>", user);
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log("error =>", errorCode);
-     
-    });
+
+  if(Email.value == '' && password.value == ''){
+    message.innerHTML = "Please Fill The Form."
+  }
+  else if(Email.value == '' ){
+    message.innerHTML = "Please Enter The Email."
+  }
+  else if(password.value == ''){
+    message.innerHTML = "Please Enter The Password"
+  }
+  else{
+      console.log(Email.value);
+      console.log(password.value);
+      createUserWithEmailAndPassword(auth, Email.value, password.value)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log("user =>", user);
+          window.location = "./logIn.html"
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log("error =>", errorCode);
+         
+        });
+    }
+
 });
 
 let getBtn = document.querySelector('#Sbutton1');
