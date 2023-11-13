@@ -37,7 +37,7 @@ body {
 }
 .button{
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-evenly !important;
     
 }
 
@@ -45,21 +45,18 @@ body {
 input{
     width: 100% !important;
     margin-top: 20px;
+    border: 1px solid rgb(63, 94, 179) !important;
 }
 .main{
     background-color: whitesmoke;
-    box-shadow: inset 0px 0px 15px black;
-    width: 300px;
-    height: 450px;
-    margin-top: 12%;
-    border-radius: 20px;
+    box-shadow: inset 0px 0px 15px;
+    width: 350px;
+    margin-top: 150px;
+    border-radius: 10px;
+    padding: 30px 15px 70px 15px;
+    
 }
-.main:hover{
-    border: 5px double black;
-    box-shadow: 0px 0px 15px white;
-    transform: scale(1.1);
-    transition: 1s;
-}
+
 .forget{
     position: absolute;
     top: 60px;
@@ -151,6 +148,8 @@ input{
     border-radius: 0.5em;
     background: #e8e8e8;
     border: 2px solid rgb(63, 94, 179);
+    position: relative;
+    top: 50px;
     
   }
   
