@@ -3,6 +3,7 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js";
+import { getFirestore ,  collection, addDoc } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyAjtZdajh6XmdtUPSRop58Hf-DBE38Iy24",
   authDomain: "authentication-8001a.firebaseapp.com",
@@ -14,6 +15,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
+const db = getFirestore(app);
 
 let Btn = document.querySelector("#signUp");
 
@@ -35,10 +37,22 @@ Btn.addEventListener("click", () => {
       console.log(Email.value);
       console.log(password.value);
       createUserWithEmailAndPassword(auth, Email.value, password.value)
-        .then((userCredential) => {
+        .then(async(userCredential) => {
           const user = userCredential.user;
           console.log("user =>", user);
+          try {
+            const docRef = await addDoc(collection(db, "users"), {
+              first: Email.value,
+              last: password.value,
+              
+            });
+            console.log("Document written with ID: ", docRef.id);
+          } catch (e) {
+            console.error("Error adding document: ", e);
+          }
           window.location = "./logIn.html"
+
+
         })
         .catch((error) => {
           const errorCode = error.code;
