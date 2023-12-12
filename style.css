@@ -51,9 +51,9 @@ input{
     background-color: whitesmoke;
     box-shadow: inset 0px 0px 15px;
     width: 350px;
-    margin-top: 130px;
+    margin-top: 80px;
     border-radius: 10px;
-    padding: 30px 15px 70px 15px;
+    padding: 5px 15px 50px 15px;
     
 }
 
@@ -62,14 +62,33 @@ input{
     top: 60px;
     left: 37%;    
 }
+#Google{
+    margin-bottom: 12px;
+    padding: 7px;
+    width: 100%;
+    background-color: white;
+    border: 1px solid rgb(63, 94, 179) !important;
+    border-radius: 5px;
+    background-image: url(./images-removebg-preview.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 16%;
+  }
+  #Google:hover{
+      background-color: rgb(63, 94, 179);
+      color: white;
+      border: none;
+  }
+  .Google{
+    margin-top: 15px;
+  }
 .para{
     padding-top: 10px;
 }
 
 #para{
     color: rgb(63, 94, 179);
-    font-weight: 700;
-    
+    font-weight: 700; 
 }
 
 

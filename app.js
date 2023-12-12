@@ -1,9 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
 import {
   getAuth,
-  createUserWithEmailAndPassword,
+  createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup,
 } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js";
-import { getFirestore ,  collection, addDoc } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyAjtZdajh6XmdtUPSRop58Hf-DBE38Iy24",
   authDomain: "authentication-8001a.firebaseapp.com",
@@ -18,53 +18,88 @@ const auth = getAuth();
 const db = getFirestore(app);
 
 let Btn = document.querySelector("#signUp");
+let googlebtn = document.querySelector("#Google");
 
 Btn.addEventListener("click", () => {
+  let Name = document.querySelector("#sname");
   let message = document.querySelector("#para");
   let Email = document.querySelector("#semail");
   let password = document.querySelector("#spass");
 
-  if(Email.value == '' && password.value == ''){
+  if (Email.value == '' && password.value == '' && Name.value == '') {
     message.innerHTML = "Please Fill The Form."
   }
-  else if(Email.value == '' ){
+  else if (Email.value == '') {
     message.innerHTML = "Please Enter The Email."
   }
-  else if(password.value == ''){
+  else if (password.value == '') {
     message.innerHTML = "Please Enter The Password"
   }
-  else{
-      console.log(Email.value);
-      console.log(password.value);
-      createUserWithEmailAndPassword(auth, Email.value, password.value)
-        .then(async(userCredential) => {
-          const user = userCredential.user;
-          console.log("user =>", user);
-          try {
-            const docRef = await addDoc(collection(db, "users"), {
-              first: Email.value,
-              last: password.value,
-              
-            });
-            console.log("Document written with ID: ", docRef.id);
-          } catch (e) {
-            console.error("Error adding document: ", e);
-          }
-          window.location = "./logIn.html"
+  else if (Name.value == '') {
+    message.innerHTML = "Please Enter The Name"
+  }
+  else {
+    console.log(Name.value);
+    console.log(Email.value);
+    console.log(password.value);
+    createUserWithEmailAndPassword(auth, Email.value, password.value)
+      .then(async (userCredential) => {
+        const user = userCredential.user;
+        console.log("user =>", user);
+        try {
+          const docRef = await addDoc(collection(db, "users"), {
+
+            Email: Email.value,
+            Password: password.value,
+
+          });
+          console.log("Document written with ID: ", docRef.id);
+        } catch (e) {
+          console.error("Error adding document: ", e);
+        }
+        window.location = "./logIn.html"
 
 
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log("error =>", errorCode);
-         
-        });
-    }
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("error =>", errorCode);
+
+      });
+  }
 
 });
 
+googlebtn.addEventListener("click", () => {
+  const provider = new GoogleAuthProvider();
+
+  signInWithPopup(auth, provider)
+    .then((result) => {
+
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+
+      const user = result.user;
+      console.log(user)
+      window.location = './welcome.html'
+
+    }).catch((error) => {
+
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorMessage)
+
+      const email = error.customData.email;
+
+      const credential = GoogleAuthProvider.credentialFromError(error);
+
+    });
+
+
+})
+
 let getBtn = document.querySelector('#Sbutton1');
-getBtn.addEventListener('click' , ()=>{
-    window.location = "./logIn.html"
+getBtn.addEventListener('click', () => {
+  window.location = "./logIn.html"
 })
