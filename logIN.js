@@ -1,8 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
 import {
   getAuth,
-  signInWithEmailAndPassword,GoogleAuthProvider,signInWithPopup,
+  signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup,
 } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js";
+import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
 const firebaseConfig = {
   apiKey: "AIzaSyAjtZdajh6XmdtUPSRop58Hf-DBE38Iy24",
   authDomain: "authentication-8001a.firebaseapp.com",
@@ -14,6 +15,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
+const db = getFirestore(app);
 
 let log_Btn = document.querySelector("#signIn");
 let googlebtn = document.querySelector("#Google");
@@ -23,24 +25,30 @@ log_Btn.addEventListener("click", () => {
   let log_password = document.querySelector("#lpass");
   let message = document.querySelector("#para");
 
-  if (log_Email.value == '' && log_password.value == '' && name.value == '') {
+  if (log_Email.value == '' && log_password.value == '') {
     message.innerHTML = "Please Fill The Form."
+    setTimeout(() => {
+      message.innerHTML = ""
+    }, 3000)
   }
   else if (log_Email.value == '') {
     message.innerHTML = "Please Enter The Email."
+    setTimeout(() => {
+      message.innerHTML = ""
+    }, 3000)
   }
   else if (log_password.value == '') {
-    message.innerHTML = "Please Enter The Password"
-  }
-  else if (name.value == '') {
-    message.innerHTML = "Please Enter The Name"
+    message.innerHTML = "Please Enter The Password."
+    setTimeout(() => {
+      message.innerHTML = ""
+    }, 3000)
   }
   else {
     signInWithEmailAndPassword(auth, log_Email.value, log_password.value)
       .then((userCredential) => {
         const user = userCredential.user;
         console.log("user =>", user);
-        localStorage.setItem("userEmail", user.email)
+        localStorage.setItem("USEREmail", user.email)
         window.location = "./welcome.html"
       })
       .catch((error) => {
@@ -56,13 +64,25 @@ googlebtn.addEventListener("click", () => {
   const provider = new GoogleAuthProvider();
 
   signInWithPopup(auth, provider)
-    .then((result) => {
+    .then(async (result) => {
 
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
 
       const user = result.user;
-      console.log(user)
+      console.log(user.displayName);
+      console.log(user.email);
+      localStorage.setItem("USEREMAIL", user.email)
+      
+      try {
+        const docRef = await addDoc(collection(db, "users"), {
+          Name: user.displayName,
+          Email: user.email,
+        });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
       window.location = './welcome.html'
 
     }).catch((error) => {

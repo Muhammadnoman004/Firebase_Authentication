@@ -54,14 +54,21 @@
             }
         });
         let LogOutbtn = document.querySelector(".button2");
-        let userEmail = localStorage.getItem("userEmail")
-        let getUserEmail = document.querySelector("#userEmail")
-        getUserEmail.innerHTML = userEmail
+        let USEREmail = localStorage.getItem("USEREmail");
+        let GoogleUserEmail = localStorage.getItem("USEREMAIL");
+        let getUserEmail = document.querySelector("#userEmail");
+        if(USEREmail){
+            getUserEmail.innerHTML = USEREmail
+        }
+        else{
+            getUserEmail.innerHTML = GoogleUserEmail
+        }
         LogOutbtn.addEventListener("click", () => {
             signOut(auth).then(() => {
                 // Sign-out successful.
                 console.log('logout successfully');
-                localStorage.removeItem("userEmail");
+                localStorage.removeItem("USEREMAIL");
+                localStorage.removeItem("USEREmail");
                 window.location = "./index.html"
             }).catch((error) => {
                 console.log(error);

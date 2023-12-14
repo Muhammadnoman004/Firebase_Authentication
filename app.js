@@ -28,15 +28,27 @@ Btn.addEventListener("click", () => {
 
   if (Email.value == '' && password.value == '' && Name.value == '') {
     message.innerHTML = "Please Fill The Form."
+    setTimeout(() => {
+      message.innerHTML = ""
+    }, 3000)
   }
   else if (Email.value == '') {
     message.innerHTML = "Please Enter The Email."
+    setTimeout(() => {
+      message.innerHTML = ""
+    }, 3000)
   }
   else if (password.value == '') {
-    message.innerHTML = "Please Enter The Password"
+    message.innerHTML = "Please Enter The Password."
+    setTimeout(() => {
+      message.innerHTML = ""
+    }, 3000)
   }
   else if (Name.value == '') {
-    message.innerHTML = "Please Enter The Name"
+    message.innerHTML = "Please Enter The Name."
+    setTimeout(() => {
+      message.innerHTML = ""
+    }, 3000)
   }
   else {
     console.log(Name.value);
@@ -48,7 +60,7 @@ Btn.addEventListener("click", () => {
         console.log("user =>", user);
         try {
           const docRef = await addDoc(collection(db, "users"), {
-
+            Name: Name.value,
             Email: Email.value,
             Password: password.value,
 
@@ -75,13 +87,25 @@ googlebtn.addEventListener("click", () => {
   const provider = new GoogleAuthProvider();
 
   signInWithPopup(auth, provider)
-    .then((result) => {
+    .then(async (result) => {
 
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential.accessToken;
 
       const user = result.user;
-      console.log(user)
+      console.log(user.displayName)
+      console.log(user.email)
+      localStorage.setItem("USEREMAIL", user.email)
+
+      try {
+        const docRef = await addDoc(collection(db, "users"), {
+          Name: user.displayName,
+          Email: user.email,
+        });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
       window.location = './welcome.html'
 
     }).catch((error) => {
